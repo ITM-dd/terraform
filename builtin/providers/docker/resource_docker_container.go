@@ -8,6 +8,8 @@ import (
 
 	"github.com/hashicorp/terraform/helper/hashcode"
 	"github.com/hashicorp/terraform/helper/schema"
+	
+	"strings"
 )
 
 func resourceDockerContainer() *schema.Resource {
@@ -190,6 +192,7 @@ func resourceDockerContainer() *schema.Resource {
 							ValidateFunc: func(v interface{}, k string) (ws []string, es []error) {
 								value := v.(string)
 								value = fmt.Sprintf("%q", value)
+								value = strings.Trim(value, "\"")
 								if !regexp.MustCompile(`^[a-zA-Z]\:\\|^/`).MatchString(value) {
 									es = append(es, fmt.Errorf(
 										"%q must be an absolute path v4", k))
